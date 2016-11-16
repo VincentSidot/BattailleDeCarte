@@ -6,8 +6,6 @@
 const int tries = 1'000'000;
 
 
-
-
 inline std::string winner(const std::vector<std::string> &v,int &p1,int &p2)
 {
 	int cpt{ 0 };
@@ -36,7 +34,7 @@ int main()
 	std::chrono::time_point<std::chrono::system_clock> start, end;
 	start = std::chrono::system_clock::now();
 	std::vector<std::string> m_winner;
-	std::vector<size_t> m_tours;																													//2^20 octet
+	std::vector<size_t> m_tours;																												//1024*1024 octet
 	std::cout << "Requesting " << ((tries * sizeof(size_t) + tries * sizeof(std::string("Player 1")) + tries * sizeof(int) + tries * sizeof(int)) / 1'048'576) << "MO RAM\n";
 	m_winner.reserve(tries * 8);
 	m_tours.reserve(tries * 8);
@@ -45,8 +43,6 @@ int main()
 	std::cout << "Starting " << tries <<" tests" << std::endl;
 	for (size_t i{ 0 }; i < tries; ++i)
 	{
-		if (i == 250'000 || i == 500'000 || i == 750'000 || i == 1'000'000 || i == 100'000 || i == 2'000'000 || i == 3'000'000 || i == 9'500'000 || i == 5'000'000 || i == 7'000'000 || i == 9'000'000)
-			std::cout << "Test count : " << i << std::endl;
 		unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
 		p1 = new vPackCarte;
 		p2 = new vPackCarte;
@@ -73,6 +69,7 @@ int main()
 	int p1i, p2i;
 	std::cout << "Most winner : " << winner(m_winner,p1i,p2i) << std::endl;
 	std::cout << "Player 1 win : " << p1i << " times\nPlayer 2 win : " << p2i << " times\n";
+	std::cout << "Player 1 win rate : " << ((p1i * 100) / tries) << "%\nPlayer 2 win rate : " << ((p2i * 100) / tries) << "%\n";
 	std::cout << "Average time : " << time << "ms"<<std::endl;
 	int round{ std::accumulate(m_tours.begin(), m_tours.end(), 0) };
 	double average_round{ static_cast<double>( round / m_tours.size()) };
